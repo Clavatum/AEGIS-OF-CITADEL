@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Services.Core;
-using UnityEngine.PlayerLoop;
-using Unity.VisualScripting;
+using static AuthMng;
+
 
 public class GameStatsManager : MonoBehaviour
 {
@@ -36,9 +36,6 @@ public class GameStatsManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            var loginController = FindObjectOfType<LoginController>();
-            loginController.OnSignedIn += HandleSignIn;
 
             var authMng = FindObjectOfType<AuthMng>();
             authMng.OnSignedIn += HandleSignIn;
