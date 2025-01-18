@@ -3,10 +3,9 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Unity.Services.Authentication.PlayerAccounts;
 using System;
+
 
 public class AuthMng : MonoBehaviour
 {
@@ -15,17 +14,13 @@ public class AuthMng : MonoBehaviour
     public TMP_InputField passwordInput;
     public TMP_Text logTxt;
 
-    public Button loginButton;
-
     [SerializeField] private TMP_Text userNameText;
-    [SerializeField] private LoginController loginController;
 
-    private PlayerProfile playerProfile;
     public event Action<PlayerProfile> OnSignedIn;
-    public PlayerProfile PlayerProfile => playerProfile;
 
-    private GameStatsManager gameStatsManager;
     private PlayerInfo playerInfo;
+    private PlayerProfile playerProfile;
+    private GameStatsManager gameStatsManager;
 
     private async void Awake()
     {
@@ -173,28 +168,10 @@ public class AuthMng : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
-    #region - UnityAccount -
-
-    private void OnEnable()
+    [Serializable]
+    public struct PlayerProfile
     {
-        loginController.OnSignedIn += LoginController_OnSignedIn;
+        public PlayerInfo playerInfo;
+        public string Name;
     }
-
-    private void OnDisable()
-    {
-        loginController.OnSignedIn -= LoginController_OnSignedIn;
-    }
-
-    public async void LoginButtonPressed()
-    {
-        await loginController.InitSignIn();
-        LoadGameSceneByIndex(1, playerProfile.Name);
-    }
-
-    private void LoginController_OnSignedIn(PlayerProfile profile)
-    {
-        if (userNameText == null) { return; }
-        userNameText.text = profile.Name;
-    }
-    #endregion
 }
